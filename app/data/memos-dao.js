@@ -24,9 +24,11 @@ function MemosDAO(db) {
     );
   };
 
-  this.getAllMemos = (userId, callback) => {
+  this.getAllMemos = (filterByUserId, callback) => {
+    const filter = filterByUserId ? { userId: filterByUserId } : {};
+
     memosCol
-      .find({ userId })
+      .find(filter)
       .sort({
         timestamp: -1,
       })

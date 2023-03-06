@@ -15,9 +15,11 @@ function MemosHandler(db) {
   };
 
   this.displayMemos = (req, res, next) => {
-    const { userId } = req.session;
+    const { userId, isAdmin } = req.session;
 
-    memosDAO.getAllMemos(userId, (err, docs) => {
+    const filterByUserId = isAdmin ? false : userId;
+
+    memosDAO.getAllMemos(filterByUserId, (err, docs) => {
       if (err) return next(err);
       return res.render("memos", {
         memosList: docs,
