@@ -10,8 +10,6 @@ function BenefitsHandler(db) {
     benefitsDAO.getAllNonAdminUsers((error, users) => {
       if (error) return next(error);
 
-      console.log(req.session.isAdmin);
-
       return res.render("benefits", {
         users,
         user: {
