@@ -3,6 +3,7 @@
 <div class="row">
     <div class="col-lg-12">
 
+        {% if !user.isAdmin %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -24,6 +25,7 @@
 
             </div>
         </div>
+        {% endif %}
 
         {% for doc in memosList %}
         <p><b>{{ doc.user[0].lastName }}, {{ doc.user[0].firstName }}:</b></p>
