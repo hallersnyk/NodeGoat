@@ -28,7 +28,19 @@ function MemosDAO(db) {
     const filter = filterByUserId ? { userId: filterByUserId } : {};
 
     memosCol
-      .find(filter)
+      .aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $match: filter,
+        },
+      ])
       .sort({
         timestamp: -1,
       })
