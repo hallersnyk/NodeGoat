@@ -26,11 +26,13 @@
         </div>
 
         {% for doc in memosList %}
+        <p><b>{{ doc.user[0].lastName }}, {{ doc.user[0].firstName }}:</b></p>
         <div class="panel panel-info">
             <div class="panel-body">
                 {{ marked(doc.memo) }}
             </div>
         </div>
+        <br/><br/>
         {% endfor %}
 
     </div>
