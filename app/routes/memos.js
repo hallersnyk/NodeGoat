@@ -21,6 +21,7 @@ function MemosHandler(db) {
 
     memosDAO.getAllMemos(filterByUserId, (err, docs) => {
       if (err) return next(err);
+
       return res.render("memos", {
         memosList: docs,
         userId: userId,
