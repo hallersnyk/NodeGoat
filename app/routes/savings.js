@@ -7,10 +7,11 @@ function SavingsHandler(db) {
   const savingsDAO = new SavingsDAO(db);
 
   this.displaySavings = (req, res, next) => {
-    savingsDAO.getAllUsersSavings((error, users) => {
-      if (error) return next(error);
+    const { userId, isAdmin } = req.session;
+    const filterByUserId = isAdmin ? false : userId;
 
-      console.log(JSON.stringify(users, null, 2));
+    savingsDAO.getAllUsersSavings(filterByUserId, (error, users) => {
+      if (error) return next(error);
 
       return res.render("savings", {
         users,

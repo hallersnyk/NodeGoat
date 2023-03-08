@@ -13,7 +13,8 @@ function SavingsDAO(db) {
 
   const usersCol = db.collection("users");
 
-  this.getAllUsersSavings = (callback) => {
+  this.getAllUsersSavings = (userId, callback) => {
+    const usersFilter = userId ? { _id: userId } : {};
     usersCol
       .aggregate([
         {
@@ -23,6 +24,9 @@ function SavingsDAO(db) {
             foreignField: "userId",
             as: "savings",
           },
+        },
+        {
+          $match: usersFilter,
         },
       ])
       .toArray((err, users) => callback(null, users));
