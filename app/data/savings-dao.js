@@ -12,6 +12,7 @@ function SavingsDAO(db) {
   }
 
   const usersCol = db.collection("users");
+  const savingsCol = db.collection("savings");
 
   this.getAllUsersSavings = (userId, callback) => {
     const usersFilter = userId ? { _id: userId } : {};
@@ -30,6 +31,27 @@ function SavingsDAO(db) {
         },
       ])
       .toArray((err, users) => callback(null, users));
+  };
+
+  this.updateSavings = (userId, savingsTotal, callback) => {
+    savingsCol.update(
+      {
+        userId: parseInt(userId),
+      },
+      {
+        $set: {
+          totalSavings: parseInt(savingsTotal),
+        },
+      },
+      (err, result) => {
+        if (!err) {
+          console.log("Updated savings");
+          return callback(null, result);
+        }
+
+        return callback(err, null);
+      }
+    );
   };
 }
 

@@ -70,6 +70,7 @@ const index = (app, db) => {
 
   // Savings Page
   app.get("/savings", isLoggedIn, savingsHandler.displaySavings);
+  app.post("/savings", isLoggedIn, savingsHandler.updateSavings);
 
   // Allocations Page
   app.get(

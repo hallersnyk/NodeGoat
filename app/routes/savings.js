@@ -22,6 +22,31 @@ function SavingsHandler(db) {
       });
     });
   };
+
+  this.updateSavings = (req, res, next) => {
+    const { userId, totalSavings } = req.body;
+
+    savingsDAO.updateSavings(userId, totalSavings, (error) => {
+      if (error) return next(error);
+
+      return res.redirect("/savings");
+
+      //   savingsDAO.getAllNonAdminUsers((error, users) => {
+      //     if (error) return next(error);
+
+      //     const data = {
+      //       users,
+      //       user: {
+      //         isAdmin: true,
+      //       },
+      //       updateSuccess: true,
+      //       environmentalScripts,
+      //     };
+
+      //     return res.render("benefits", data);
+      //   });
+    });
+  };
 }
 
 module.exports = SavingsHandler;
