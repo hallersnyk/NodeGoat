@@ -1,5 +1,6 @@
 const UserDAO = require("../data/user-dao").UserDAO;
 const AllocationsDAO = require("../data/allocations-dao").AllocationsDAO;
+const SavingsDAO = require("../data/savings-dao").SavingsDAO;
 const { environmentalScripts } = require("../../config/config");
 
 /* The SessionHandler must be constructed with a connected db */
@@ -8,6 +9,7 @@ function SessionHandler(db) {
 
   const userDAO = new UserDAO(db);
   const allocationsDAO = new AllocationsDAO(db);
+  const savingsDAO = new SavingsDAO(db);
 
   const prepareUserData = (user, next) => {
     // Generate random allocations
@@ -245,9 +247,16 @@ function SessionHandler(db) {
               // Set userId property. Required for left nav menu links
               user.userId = user._id;
 
-              return res.render("dashboard", {
-                ...user,
-                environmentalScripts,
+              // random number between 30,000 to 450,000
+              const randomSavings = Math.floor(Math.random() * 420000 + 30000);
+
+              // add savings for user
+              savingsDAO.addSavings(user._id, randomSavings, (err, user) => {
+                // return res.render("dashboard", {
+                //   ...user,
+                //   environmentalScripts,
+                // });
+                return res.redirect("/dashboard");
               });
             });
           }
@@ -272,12 +281,29 @@ function SessionHandler(db) {
 
     userId = req.session.userId;
 
-    userDAO.getUserById(userId, (err, doc) => {
+    let userTotalSavings = 0;
+    savingsDAO.getAllUsersSavings(userId, (err, userDetails) => {
       if (err) return next(err);
-      doc.userId = userId;
-      return res.render("dashboard", {
-        ...doc,
-        environmentalScripts,
+
+      const userSavings = userDetails[0].savings[0].totalSavings;
+      const formattedCurrencyUserSavings = new Intl.NumberFormat().format(
+        userSavings
+      );
+
+      const formattedCurrencyUserIncome = new Intl.NumberFormat().format(
+        userSavings * 0.045
+      );
+
+      userDAO.getUserById(userId, (err, doc) => {
+        if (err) return next(err);
+
+        doc.userId = userId;
+        return res.render("dashboard", {
+          ...doc,
+          userRetirementIncome: formattedCurrencyUserIncome,
+          userTotalSavings: formattedCurrencyUserSavings,
+          environmentalScripts,
+        });
       });
     });
   };
