@@ -1,5 +1,6 @@
 const UserDAO = require("../data/user-dao").UserDAO;
 const AllocationsDAO = require("../data/allocations-dao").AllocationsDAO;
+const SavingsDAO = require("../data/savings-dao").SavingsDAO;
 const { environmentalScripts } = require("../../config/config");
 
 /* The SessionHandler must be constructed with a connected db */
@@ -8,6 +9,7 @@ function SessionHandler(db) {
 
   const userDAO = new UserDAO(db);
   const allocationsDAO = new AllocationsDAO(db);
+  const savingsDAO = new SavingsDAO(db);
 
   const prepareUserData = (user, next) => {
     // Generate random allocations
@@ -272,12 +274,21 @@ function SessionHandler(db) {
 
     userId = req.session.userId;
 
-    userDAO.getUserById(userId, (err, doc) => {
+    let userTotalSavings = 0;
+    savingsDAO.getAllUsersSavings(userId, (err, userDetails) => {
       if (err) return next(err);
-      doc.userId = userId;
-      return res.render("dashboard", {
-        ...doc,
-        environmentalScripts,
+
+      userTotalSavings = userDetails[0].savings[0].totalSavings;
+
+      userDAO.getUserById(userId, (err, doc) => {
+        if (err) return next(err);
+
+        doc.userId = userId;
+        return res.render("dashboard", {
+          ...doc,
+          userTotalSavings,
+          environmentalScripts,
+        });
       });
     });
   };
