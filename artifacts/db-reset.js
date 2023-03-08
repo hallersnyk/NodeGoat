@@ -129,8 +129,8 @@ MongoClient.connect(db, (err, db) => {
           bonds: 100 - (stocks + funds),
         });
 
-        // random number between 10,000 to 150,000
-        const randomSavings = Math.floor(Math.random() * 140000 + 10000);
+        // random number between 30,000 to 450,000
+        const randomSavings = Math.floor(Math.random() * 420000 + 30000);
         totalSavings.push({
           userId: user._id,
           totalSavings: randomSavings,

@@ -291,7 +291,7 @@ function SessionHandler(db) {
       );
 
       const formattedCurrencyUserIncome = new Intl.NumberFormat().format(
-        userSavings * 0.35
+        userSavings * 0.045
       );
 
       userDAO.getUserById(userId, (err, doc) => {
