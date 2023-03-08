@@ -283,12 +283,17 @@ function SessionHandler(db) {
         userSavings
       );
 
+      const formattedCurrencyUserIncome = new Intl.NumberFormat().format(
+        userSavings * 0.35
+      );
+
       userDAO.getUserById(userId, (err, doc) => {
         if (err) return next(err);
 
         doc.userId = userId;
         return res.render("dashboard", {
           ...doc,
+          userRetirementIncome: formattedCurrencyUserIncome,
           userTotalSavings: formattedCurrencyUserSavings,
           environmentalScripts,
         });
