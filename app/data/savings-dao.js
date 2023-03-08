@@ -53,6 +53,23 @@ function SavingsDAO(db) {
       }
     );
   };
+
+  this.addSavings = (userId, savingsTotal, callback) => {
+    savingsCol.insert(
+      {
+        userId: parseInt(userId),
+        totalSavings: parseInt(savingsTotal),
+      },
+      (err, result) => {
+        if (!err) {
+          console.log("Updated savings");
+          return callback(null, result);
+        }
+
+        return callback(err, null);
+      }
+    );
+  };
 }
 
 module.exports = { SavingsDAO };
