@@ -278,7 +278,10 @@ function SessionHandler(db) {
     savingsDAO.getAllUsersSavings(userId, (err, userDetails) => {
       if (err) return next(err);
 
-      userTotalSavings = userDetails[0].savings[0].totalSavings;
+      const userSavings = userDetails[0].savings[0].totalSavings;
+      const formattedCurrencyUserSavings = new Intl.NumberFormat().format(
+        userSavings
+      );
 
       userDAO.getUserById(userId, (err, doc) => {
         if (err) return next(err);
@@ -286,7 +289,7 @@ function SessionHandler(db) {
         doc.userId = userId;
         return res.render("dashboard", {
           ...doc,
-          userTotalSavings,
+          userTotalSavings: formattedCurrencyUserSavings,
           environmentalScripts,
         });
       });
